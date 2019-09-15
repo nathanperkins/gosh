@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/nathanperkins/smallsh-go/smallsh"
+	"github.com/nathanperkins/smallsh-go/src/smallsh"
 	log "github.com/sirupsen/logrus"
 )
 

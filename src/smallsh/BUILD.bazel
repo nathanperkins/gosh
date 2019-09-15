@@ -6,7 +6,7 @@ go_library(
         "cd.go",
         "smallsh.go",
     ],
-    importpath = "github.com/nathanperkins/smallsh-go/smallsh",
+    importpath = "github.com/nathanperkins/smallsh-go/src/smallsh",
     visibility = ["//visibility:public"],
     deps = ["@github_com_sirupsen_logsrus//:go_default_library"],
 )
