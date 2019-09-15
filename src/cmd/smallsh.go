@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	s := new(smallsh.Smallsh)
+	s := smallsh.NewSmallsh()
 
 	if err := s.Run(); err != nil {
-		log.Errorf("Error: %v", err)
+		log.Errorf("Smallsh error: %v", err)
 	}
 }

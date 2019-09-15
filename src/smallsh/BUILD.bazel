@@ -8,12 +8,15 @@ go_library(
     ],
     importpath = "github.com/nathanperkins/smallsh-go/src/smallsh",
     visibility = ["//visibility:public"],
-    deps = ["@github_com_sirupsen_logsrus//:go_default_library"],
+    deps = ["@com_github_sirupsen_logsrus//:go_default_library"],
 )
 
 go_test(
     name = "go_default_test",
-    srcs = ["cd_test.go"],
+    srcs = [
+        "cd_test.go",
+        "smallsh_test.go",
+    ],
     data = glob(["testdata/**"]),
     embed = [":go_default_library"],
 )

@@ -38,7 +38,7 @@ func TestCD(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Could not get working directory before cd: %v", err)
 			}
-			s := new(Smallsh)
+			s := NewSmallsh()
 			if err := s.cd(test.args); err != nil {
 				t.Logf("With cd(%+v):", test.args)
 				t.Errorf("Should not have gotten error: %v", err)
@@ -83,7 +83,7 @@ func TestCDError(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Could not get working directory before: %v", err)
 			}
-			s := new(Smallsh)
+			s := NewSmallsh()
 			if err := s.cd(test.args); err == nil {
 				t.Logf("With cd(%+v):", test.args)
 				t.Errorf("Should have gotten an error.")
@@ -107,7 +107,7 @@ func TestCDWithNoArguments(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Could not get working directory before cd: %v", err)
 	}
-	s := new(Smallsh)
+	s := NewSmallsh()
 	if err := s.cd(nil); err != nil {
 		t.Fatalf("cd() should not have given an error: %v", err)
 	}
@@ -132,7 +132,7 @@ func TestCDWithNoArgumentsWithoutHOME(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Could not get working directory before cd: %v", err)
 	}
-	s := new(Smallsh)
+	s := NewSmallsh()
 	if err := s.cd(nil); err == nil {
 		t.Errorf("cd() should have given an error.")
 	}

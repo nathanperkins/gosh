@@ -7,7 +7,7 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//src/smallsh:go_default_library",
-        "@github_com_sirupsen_logsrus//:go_default_library",
+        "@com_github_sirupsen_logsrus//:go_default_library",
     ],
 )
 
