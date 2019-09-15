@@ -10,9 +10,10 @@ func TestStatusWithExit(t *testing.T) {
 		t.Fatalf("Could not setup gosh: %v", err)
 	}
 
-	got := g.RunTest("status")
-	want := `: exit value 0
-: `
+	g.Status()
+	got, _ := g.getOutput()
+	want := "exit value 0\n"
+
 	if got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}
@@ -26,9 +27,9 @@ func TestStatusWithSignal(t *testing.T) {
 	g.Gosh.lastExitType = exitTypeSignal
 	g.Gosh.lastCode = 2
 
-	got := g.RunTest("status")
-	want := `: terminated by signal 2
-: `
+	g.Status()
+	got, _ := g.getOutput()
+	want := "terminated by signal 2\n"
 	if got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}

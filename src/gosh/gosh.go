@@ -6,8 +6,6 @@ import (
 	"io"
 	"os"
 	"strings"
-
-	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -88,7 +86,7 @@ func (g *Gosh) Run() error {
 		if err == io.EOF {
 			return nil
 		} else if err != nil {
-			return fmt.Errorf("ReadString error: %v", err)
+			fmt.Fprintf(g.errFile, "ReadString error: %v", err)
 		}
 		input = strings.TrimSpace(input)
 		if input == "" || strings.HasPrefix(input, "#") {
@@ -104,10 +102,10 @@ func (g *Gosh) Run() error {
 		inputSplit := strings.Split(input, " ")
 		if inputSplit[0] == "cd" {
 			if err := g.cd(inputSplit[1:]); err != nil {
-				log.Error(err)
+				fmt.Fprintf(g.errFile, "cd error: %v", err)
 			}
 		} else {
-			fmt.Printf("Not implemented: %v\n", inputSplit)
+			fmt.Fprintf(g.errFile, "Not implemented: %v\n", inputSplit)
 		}
 	}
 }

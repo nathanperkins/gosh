@@ -74,6 +74,15 @@ func newTestGosh() (*testGosh, error) {
 	return testGosh, nil
 }
 
+func (g *testGosh) getOutput() (string, string) {
+	defer g.pipes.Close()
+	g.pipes.outWriter.Close()
+	g.pipes.errWriter.Close()
+	out, _ := ioutil.ReadAll(g.pipes.outReader)
+	err, _ := ioutil.ReadAll(g.pipes.errReader)
+	return string(out), string(err)
+}
+
 func (g *testGosh) RunTest(s string) string {
 	defer g.pipes.Close()
 
