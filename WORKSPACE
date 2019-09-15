@@ -79,3 +79,10 @@ go_repository(
     sum = "h1:Cz4ceDQGXuKRnVBDTS23GTn/pU5OE2C0WrNTOYK1Uuc=",
     version = "v0.0.0-20190422165155-953cdadca894",
 )
+
+go_repository(
+    name = "com_github_bazelbuild_rules_go",
+    importpath = "github.com/bazelbuild/rules_go",
+    sum = "h1:OZEjOTJhogNG+1Exn7IPYfNA+x9bsxwpeOuwFCa5I9E=",
+    version = "v0.0.0-20190913185928-d31ac798d17a",
+)
