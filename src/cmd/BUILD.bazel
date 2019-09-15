@@ -19,6 +19,7 @@ go_binary(
 
 go_test(
     name = "go_default_test",
+    size = "small",
     srcs = ["gosh_test.go"],
     args = [
         "--gosh=$(location :cmd)",

@@ -3,6 +3,7 @@ package gosh
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -27,8 +28,8 @@ type Option func(*Gosh)
 //
 // For testing only.
 func withStdout(out *os.File) Option {
-	return func(s *Gosh) {
-		s.outFile = out
+	return func(g *Gosh) {
+		g.outFile = out
 	}
 }
 
@@ -36,8 +37,17 @@ func withStdout(out *os.File) Option {
 //
 // For testing only.
 func withStdin(in *os.File) Option {
-	return func(s *Gosh) {
-		s.inFile = in
+	return func(g *Gosh) {
+		g.inFile = in
+	}
+}
+
+// withStderr changes the stdin of Gosh to the given file.
+//
+// For testing only.
+func withStderr(err *os.File) Option {
+	return func(g *Gosh) {
+		g.errFile = err
 	}
 }
 
@@ -45,35 +55,39 @@ func withStdin(in *os.File) Option {
 type Gosh struct {
 	lastExitType exitType
 	lastCode     int
-	outFile      *os.File
 	inFile       *os.File
+	outFile      *os.File
+	errFile      *os.File
 }
 
 // NewGosh creates a new Gosh with the given options.
 func NewGosh(opts ...Option) *Gosh {
-	s := &Gosh{
-		outFile: os.Stdout,
+	g := &Gosh{
 		inFile:  os.Stdin,
+		outFile: os.Stdout,
+		errFile: os.Stderr,
 	}
 	for _, opt := range opts {
-		opt(s)
+		opt(g)
 	}
-	return s
+	return g
 }
 
 // Run starts a gosh terminal.
-func (s *Gosh) Run() error {
-	stdin, stdout := os.Stdin, os.Stdout
-	os.Stdin, os.Stdout = s.inFile, s.outFile
+func (g *Gosh) Run() error {
+	stdin, stdout, stderr := os.Stdin, os.Stdout, os.Stderr
+	os.Stdin, os.Stdout, os.Stderr = g.inFile, g.outFile, g.errFile
 	defer func() {
-		os.Stdin, os.Stdout = stdin, stdout
+		os.Stdin, os.Stdout, os.Stderr = stdin, stdout, stderr
 	}()
 
+	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print(prompt)
-		reader := bufio.NewReader(os.Stdin)
 		input, err := reader.ReadString('\n')
-		if err != nil {
+		if err == io.EOF {
+			return nil
+		} else if err != nil {
 			return fmt.Errorf("ReadString error: %v", err)
 		}
 		input = strings.TrimSpace(input)
@@ -83,9 +97,13 @@ func (s *Gosh) Run() error {
 		if input == "exit" {
 			return nil
 		}
+		if input == "status" {
+			g.Status()
+			continue
+		}
 		inputSplit := strings.Split(input, " ")
 		if inputSplit[0] == "cd" {
-			if err := s.cd(inputSplit[1:]); err != nil {
+			if err := g.cd(inputSplit[1:]); err != nil {
 				log.Error(err)
 			}
 		} else {

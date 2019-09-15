@@ -5,6 +5,8 @@ go_library(
     srcs = [
         "cd.go",
         "gosh.go",
+        "status.go",
+        "test_helpers.go",
     ],
     importpath = "github.com/nathanperkins/gosh/src/gosh",
     visibility = ["//visibility:public"],
@@ -13,9 +15,11 @@ go_library(
 
 go_test(
     name = "go_default_test",
+    size = "small",
     srcs = [
         "cd_test.go",
         "gosh_test.go",
+        "status_test.go",
     ],
     data = glob(["testdata/**"]),
     embed = [":go_default_library"],

@@ -58,7 +58,10 @@ func newGoshProc(name string) (*os.Process, *procPipes, error) {
 }
 
 func TestExit(t *testing.T) {
-	path, _ := bazel.Runfile(*goshPath)
+	path, err := bazel.Runfile(*goshPath)
+	if err != nil {
+		t.Fatalf("Could not find gosh at %q: %v", *goshPath, err)
+	}
 
 	proc, pipes, err := newGoshProc(path)
 	if err != nil {
@@ -66,6 +69,9 @@ func TestExit(t *testing.T) {
 	}
 	if _, err := pipes.inWriter.WriteString("exit\n"); err != nil {
 		t.Fatalf("Could not write to stdin: %v", err)
+	}
+	if err := pipes.inWriter.Close(); err != nil {
+		t.Errorf("Could not close pipes.inWriter: %v", err)
 	}
 	done := make(chan error)
 	go func() {
@@ -77,7 +83,7 @@ func TestExit(t *testing.T) {
 		if err != nil {
 			t.Errorf("proc.Wait() err: %v", err)
 		}
-	case <-time.After(1 * time.Second):
+	case <-time.After(5 * time.Second):
 		t.Errorf("Timed out waiting for process.")
 	}
 }
