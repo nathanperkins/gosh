@@ -1,4 +1,4 @@
-module github.com/nathanperkins/smallsh-go
+module github.com/nathanperkins/gosh
 
 go 1.13
 

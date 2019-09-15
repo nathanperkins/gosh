@@ -7,5 +7,5 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 # go mod tidy
 # bazel run //:gazelle -- update-repos -from_file=go.mod
 #
-# gazelle:prefix github.com/nathanperkins/smallsh-go
+# gazelle:prefix github.com/nathanperkins/gosh
 gazelle(name = "gazelle")

@@ -4,9 +4,9 @@ go_library(
     name = "go_default_library",
     srcs = [
         "cd.go",
-        "smallsh.go",
+        "gosh.go",
     ],
-    importpath = "github.com/nathanperkins/smallsh-go/src/smallsh",
+    importpath = "github.com/nathanperkins/gosh/src/gosh",
     visibility = ["//visibility:public"],
     deps = ["@com_github_sirupsen_logsrus//:go_default_library"],
 )
@@ -15,7 +15,7 @@ go_test(
     name = "go_default_test",
     srcs = [
         "cd_test.go",
-        "smallsh_test.go",
+        "gosh_test.go",
     ],
     data = glob(["testdata/**"]),
     embed = [":go_default_library"],

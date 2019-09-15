@@ -1,4 +1,4 @@
-package smallsh
+package gosh
 
 import (
 	"os"
@@ -17,7 +17,7 @@ func TestExit(t *testing.T) {
 
 	done := make(chan bool)
 	go func() {
-		s := NewSmallsh(withStdin(r), withStdout(nil))
+		s := NewGosh(withStdin(r), withStdout(nil))
 		s.Run()
 		done <- true
 	}()

@@ -1,4 +1,4 @@
-package smallsh
+package gosh
 
 import (
 	"bufio"
@@ -20,38 +20,38 @@ const (
 	exitTypeSignal
 )
 
-// Option is a variadic configuration option for Smallsh.
-type Option func(*Smallsh)
+// Option is a variadic configuration option for Gosh.
+type Option func(*Gosh)
 
-// withStdout changes the stdout of Smallsh to the given file.
+// withStdout changes the stdout of Gosh to the given file.
 //
 // For testing only.
 func withStdout(out *os.File) Option {
-	return func(s *Smallsh) {
+	return func(s *Gosh) {
 		s.outFile = out
 	}
 }
 
-// withStdin changes the stdin of Smallsh to the given file.
+// withStdin changes the stdin of Gosh to the given file.
 //
 // For testing only.
 func withStdin(in *os.File) Option {
-	return func(s *Smallsh) {
+	return func(s *Gosh) {
 		s.inFile = in
 	}
 }
 
-// Smallsh handles the state of the shell.
-type Smallsh struct {
+// Gosh handles the state of the shell.
+type Gosh struct {
 	lastExitType exitType
 	lastCode     int
 	outFile      *os.File
 	inFile       *os.File
 }
 
-// NewSmallsh creates a new Smallsh with the given options.
-func NewSmallsh(opts ...Option) *Smallsh {
-	s := &Smallsh{
+// NewGosh creates a new Gosh with the given options.
+func NewGosh(opts ...Option) *Gosh {
+	s := &Gosh{
 		outFile: os.Stdout,
 		inFile:  os.Stdin,
 	}
@@ -61,8 +61,8 @@ func NewSmallsh(opts ...Option) *Smallsh {
 	return s
 }
 
-// Run starts a smallsh terminal.
-func (s *Smallsh) Run() error {
+// Run starts a gosh terminal.
+func (s *Gosh) Run() error {
 	stdin, stdout := os.Stdin, os.Stdout
 	os.Stdin, os.Stdout = s.inFile, s.outFile
 	defer func() {

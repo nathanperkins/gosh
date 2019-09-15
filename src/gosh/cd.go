@@ -1,11 +1,11 @@
-package smallsh
+package gosh
 
 import (
 	"fmt"
 	"os"
 )
 
-func (Smallsh) cd(args []string) error {
+func (Gosh) cd(args []string) error {
 	if len(args) == 0 {
 		home, ok := os.LookupEnv("HOME")
 		if !ok {

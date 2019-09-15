@@ -2,11 +2,11 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
     name = "go_default_library",
-    srcs = ["smallsh.go"],
-    importpath = "github.com/nathanperkins/smallsh-go/src/cmd",
+    srcs = ["gosh.go"],
+    importpath = "github.com/nathanperkins/gosh/src/cmd",
     visibility = ["//visibility:private"],
     deps = [
-        "//src/smallsh:go_default_library",
+        "//src/gosh:go_default_library",
         "@com_github_sirupsen_logsrus//:go_default_library",
     ],
 )
