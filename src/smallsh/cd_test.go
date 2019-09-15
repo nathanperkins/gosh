@@ -100,22 +100,48 @@ func TestCDError(t *testing.T) {
 }
 
 func TestCDWithNoArguments(t *testing.T) {
-	want, ok := os.LookupEnv("HOME")
-	if !ok {
-		t.Fatalf("Could not find $HOME.")
+	if err := os.Setenv("HOME", "testdata"); err != nil {
+		t.Fatalf("Could not set $HOME: %v", err)
 	}
 	before, err := os.Getwd()
 	if err != nil {
 		t.Fatalf("Could not get working directory before cd: %v", err)
 	}
 	s := new(Smallsh)
-	s.cd(nil)
+	if err := s.cd(nil); err != nil {
+		t.Fatalf("cd() should not have given an error: %v", err)
+	}
 	got, err := os.Getwd()
 	if err != nil {
 		t.Fatalf("Could not get working directory after cd: %v", err)
 	}
+	want := filepath.Join(before, "testdata")
 	if got != want {
 		t.Errorf("Directory = %v, want %v", got, want)
+	}
+	if err := os.Chdir(before); err != nil {
+		t.Fatalf("Could not change dir back: %v", err)
+	}
+}
+
+func TestCDWithNoArgumentsWithoutHOME(t *testing.T) {
+	if err := os.Unsetenv("HOME"); err != nil {
+		t.Fatalf("Could not unset $HOME: %v", err)
+	}
+	before, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Could not get working directory before cd: %v", err)
+	}
+	s := new(Smallsh)
+	if err := s.cd(nil); err == nil {
+		t.Errorf("cd() should have given an error.")
+	}
+	after, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Could not get working directory after cd: %v", err)
+	}
+	if before != after {
+		t.Errorf("Directory change from %s to %s.", before, after)
 	}
 	if err := os.Chdir(before); err != nil {
 		t.Fatalf("Could not change dir back: %v", err)
