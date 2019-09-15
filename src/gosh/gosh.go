@@ -6,17 +6,11 @@ import (
 	"io"
 	"os"
 	"strings"
+	"syscall"
 )
 
 const (
 	prompt = ": "
-)
-
-type exitType int
-
-const (
-	exitTypeExit exitType = iota
-	exitTypeSignal
 )
 
 // Option is a variadic configuration option for Gosh.
@@ -51,11 +45,10 @@ func withStderr(err *os.File) Option {
 
 // Gosh handles the state of the shell.
 type Gosh struct {
-	lastExitType exitType
-	lastCode     int
-	inFile       *os.File
-	outFile      *os.File
-	errFile      *os.File
+	lastWaitStatus syscall.WaitStatus
+	inFile         *os.File
+	outFile        *os.File
+	errFile        *os.File
 }
 
 // NewGosh creates a new Gosh with the given options.
@@ -105,7 +98,7 @@ func (g *Gosh) Run() error {
 				fmt.Fprintf(g.errFile, "cd error: %v", err)
 			}
 		} else {
-			fmt.Fprintf(g.errFile, "Not implemented: %v\n", inputSplit)
+			g.Exec(inputSplit[0], inputSplit)
 		}
 	}
 }

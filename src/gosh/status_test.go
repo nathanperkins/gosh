@@ -24,9 +24,7 @@ func TestStatusWithSignal(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Could not setup gosh: %v", err)
 	}
-	g.Gosh.lastExitType = exitTypeSignal
-	g.Gosh.lastCode = 2
-
+	g.Gosh.lastWaitStatus = 0x82
 	g.Status()
 	got, _ := g.getOutput()
 	want := "terminated by signal 2\n"
